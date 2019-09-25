@@ -1,4 +1,7 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const DataStore = require('./store');
+
+const store = new
 
 class AppWindow extends BrowserWindow {
 
