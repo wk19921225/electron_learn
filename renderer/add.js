@@ -1,6 +1,9 @@
 const {ipcRenderer} = require('electron')
 const {$} = require('./helper')
 const path = require('path')
+
+let musicFilesPath = [];
+
 window.addEventListener('DOMContentLoaded', () => {
     $('selectMusic').addEventListener('click', () => {
         ipcRenderer.send('openDialogFile')
@@ -17,7 +20,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     ipcRenderer.on('injectMusicList', (event, pathes) => {
         if(Array.isArray(pathes)) {
+            musicFilesPath = pathes;
            renderHtmlList(pathes)
         }
     })
+
+    $('injectMusic').addEventListener('click', () => {
+        ipcRenderer.send('addMusic', musicFilesPath)
+    });
 })
