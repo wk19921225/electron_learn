@@ -31,6 +31,10 @@ app.on(
         // 创建窗口
         const mainWindow = new AppWindow({}, 'renderer/index.html')
 
+        mainWindow.webContents.on('did-finish-load', () => {
+            mainWindow.send('addMusic', store.getTracks())
+        })
+
         ipcMain.on('addMusicWindow', (event) => {
             const secondWindow = new AppWindow({
                 width: 500,
@@ -45,7 +49,7 @@ app.on(
             dialog.showOpenDialog({
                 properties: ['openFile', 'multiSelections'],
                 filters: [
-                    { name: 'music', extensions: ['mp3'] },
+                    {name: 'music', extensions: ['mp3']},
                 ]
             }, (files) => {
                 event.sender.send('injectMusicList', files)
@@ -55,7 +59,7 @@ app.on(
         ipcMain.on('addMusic', (event, tracks) => {
             // console.log(tracks) // 当前需要导入的音乐
             const updateTracks = store.addTracks(tracks).getTracks();
-            console.log(updateTracks)
+            mainWindow.send('addTracks', updateTracks)
         })
 
     }
